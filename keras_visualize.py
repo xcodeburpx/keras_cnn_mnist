@@ -32,13 +32,16 @@ def plot_filters(layer, x, y):
     
     filters = layer.get_weights()[0]
     fig = plt.figure()
+    plt.title("First convolutional layer weights")
+    plt.xticks(np.array([]))
+    plt.yticks(np.array([]))
     for j in range(len(filters)):
         ax = fig.add_subplot(y, x, j+1)
         im = ax.matshow(filters[j][0], cmap="Greys")
         plt.xticks(np.array([]))
         plt.yticks(np.array([]))
     fig.subplots_adjust(right=0.8)
-    cbar_ax = fig.add_axes([1, 0.1, 0.05 ,0.8])
+    cbar_ax = fig.add_axes([1, 0.07, 0.05 ,0.821])
     fig.colorbar(im, cax = cbar_ax)
     plt.tight_layout()
     return plt
@@ -50,21 +53,26 @@ plt.imshow(input_image[0,0,:,:], cmap="Greys")
 
 output_layer = model.layers[1].output
 input_layer = model.layers[0].input
-output_fn = Model(input=input_layer, output=output_layer)
-output_image = output_fn.predict(input_image)
-print(output_image.shape)
+output_fn = K.function([input_layer], [output_layer])
+
+output_image = output_fn([input_image])[0]
+print("Output image shape before roll:",output_image.shape)
+
 
 output_image = np.rollaxis(np.rollaxis(output_image, 3, 1), 3, 1)
-print(output_image.shape)
+print("Output image shape after roll:",output_image.shape)
 
 fig = plt.figure()
+plt.title("First convolutional layer view of output")
+plt.xticks(np.array([]))
+plt.yticks(np.array([]))
 for i in range(32):
     ax = fig.add_subplot(4,8,i+1)
     im = ax.imshow(output_image[0,:,:,i], cmap="Greys")
     plt.xticks(np.array([]))
     plt.yticks(np.array([]))
 fig.subplots_adjust(right=0.8)
-cbar_ax = fig.add_axes([1, 0.1, 0.05 ,0.8])
+cbar_ax = fig.add_axes([1, 0.07, 0.05 ,0.821])
 fig.colorbar(im, cax = cbar_ax)
 plt.tight_layout()
     
