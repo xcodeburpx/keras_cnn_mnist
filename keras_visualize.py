@@ -44,7 +44,7 @@ def plot_filters(layer, x, y):
     cbar_ax = fig.add_axes([1, 0.07, 0.05 ,0.821])
     fig.colorbar(im, cax = cbar_ax)
     plt.tight_layout()
-    return plt
+    plt.show()
 
 input_image = X_train[2:3,:,:,:]
 plot_filters(model.layers[1], 8, 4)
